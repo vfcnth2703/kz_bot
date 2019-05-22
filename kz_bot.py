@@ -31,8 +31,8 @@ def get_kz_table(soup):
     return table
 
 
-def get_today_rows(table, search_criteria):
-    search_res = table.findChildren('td',text = re.compile(search_criteria))
+def get_today_rows(table):
+    search_res = table.findChildren('td',text = re.compile('сегодня'))
     rows: List[object] = []
     for item in search_res:
         assert isinstance(item.parent, object)
@@ -40,10 +40,10 @@ def get_today_rows(table, search_criteria):
     return rows
 
 
+
 def main():
     # pass
-    search_criteria = 'сегодня'
-    rows = get_today_rows(get_kz_table(get_soup(get_html(url))),search_criteria)
+    rows = get_today_rows(get_kz_table(get_soup(get_html(url))))
     print(rows)
 
 
