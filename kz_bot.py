@@ -44,7 +44,10 @@ def get_today_rows(table):
 
 def main():
     # pass
-    rows = get_today_rows(get_kz_table(get_soup(get_html(url))))
+    html = get_html(url)
+    soup = get_soup(html)
+    table = get_kz_table(soup)
+    rows = get_today_rows(table)
     print(rows)
 
 
