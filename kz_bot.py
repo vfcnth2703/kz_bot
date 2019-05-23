@@ -1,7 +1,6 @@
 # coding=utf-8
 import re
 from typing import List
-
 import requests
 from bs4 import BeautifulSoup
 
@@ -34,6 +33,7 @@ def get_kz_table(soup):
 
 def get_today_rows(table):
     search_res = table.findChildren('td', text=re.compile('сегодня'))
+    # search_res = table.findChildren('img', onclick=re.compile('cat\(22\)')) # поиск по категории
     rows: List[object] = []
     for item in search_res:
         assert isinstance(item.parent, object)
@@ -48,6 +48,7 @@ class KzParser:
         self.year = ''
         self.commentary_cnt = 0
         self.size = ''
+        self.quality = ''
         self.seeds = 0
         self.peers = 0
         self.uploaded = ''
@@ -56,14 +57,20 @@ class KzParser:
 
     def set_data_fields(self, data):
         try:
-            self.category = int(
-                data.find('img', {'class': 'pointer'}).attrs['onclick'].replace('(', ' ').replace(')', ' ').split()[1])
+            self.category = data.find('img', {'class': 'pointer'}).attrs['onclick'].split('cat')[-1].replace(';','')[1:-1]
         except:
             self.category = ''
         try:
             self.name = data.find('td', {'class': 'nam'}).text.split('/')[0]
         except:
             self.name = ''
+
+        try:
+            # self.quality = data.find('td', {'class': 'nam'}).getText().split('/')[-1].split()[-1][1:-1]
+            self.quality = data.find('td', text=re.compile('\d{3,4}(p|P)')).getText().split('/')[-1].split()[-1][1:-1]
+        except:
+            self.quality = ''
+
         try:
             self.year = data.find('td', {'class': 'nam'}).text.split('/')[2]
         except:
@@ -107,7 +114,7 @@ def main():
     rows = get_today_rows(table)
     for row in rows:
         row_data: KzParser = kz.set_data_fields(row)
-        print(row_data.name, row_data.year)
+        print(row_data.category, row_data.name, row_data.quality, row_data.year)
 
 
 if __name__ == '__main__':
