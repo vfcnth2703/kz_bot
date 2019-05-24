@@ -4,13 +4,14 @@ from typing import List
 import requests
 from bs4 import BeautifulSoup
 
-base_url = 'http://kinozal.tv/'
-paginator = 'browse.php?page='
+base_url = 'http://kinozal.tv/browse.php?'
+paginator = 'page='
 page_num = '1'
 
 # url = 'http://kinozal.tv/browse.php?page=1'
 url = f'{base_url}{paginator}{page_num}'
-proxy = {'http': '167.86.97.101:80'}
+# proxy = {'http': '167.86.97.101:80'}
+proxy = {'http': '142.93.55.98:8080'}
 
 
 def get_html(url):
