@@ -113,6 +113,8 @@ def main():
     kz = KzParser()
     html = get_html(url)
     soup = get_soup(html)
+    if soup is None:
+        exit('Нечего делать , суп не сварился еще.')
     table = get_kz_table(soup)
     rows = get_today_rows(table)
     for row in rows:
