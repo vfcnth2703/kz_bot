@@ -42,6 +42,9 @@ def get_today_rows(table):
 
 
 class KzParser:
+    """
+    Контейнер и метод заполнения его
+    """
     def __init__(self):
         self.category = ''
         self.name = ''
