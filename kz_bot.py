@@ -59,55 +59,87 @@ class KzParser:
         self.super_seed = {'href': '',
                            'nick': ''}
 
-    def set_data_fields(self, data):
+    def set_data_fields(self, row):
         try:
-            self.category = data.find('img', {'class': 'pointer'}).attrs['onclick'].split('cat')[-1].replace(';','')[1:-1]
+            self.set_category(row)
         except:
             self.category = ''
         try:
-            self.name = data.find('td', {'class': 'nam'}).text.split('/')[0]
+            self.set_name(row)
         except:
             self.name = ''
 
         try:
-            # self.quality = data.find('td', {'class': 'nam'}).getText().split('/')[-1].split()[-1][1:-1]
-            self.quality = data.find('td', text=re.compile('\d{3,4}(p|P)')).getText().split('/')[-1].split()[-1][1:-1]
+            self.set_quality(row)
         except:
             self.quality = ''
 
         try:
-            self.year = data.find('td', {'class': 'nam'}).text.split('/')[2]
+            self.set_year(row)
         except:
             self.year = ''
         try:
-            self.commentary_cnt = data.find_all('td', {'class': 's'})[0].text
+            self.set_commentary_cnt(row)
         except:
             self.commentary_cnt = 0
         try:
-            self.size = data.find_all('td', {'class': 's'})[1].text
+            self.set_size(row)
         except:
             self.size = ''
         try:
-            self.uploaded = data.find_all('td', {'class': 's'})[2].text
+            self.set_upload(row)
         except:
             self.uploaded = ''
         try:
-            self.seeds = data.find('td', {'class': 'sl_s'}).text
+            self.set_seeds(row)
         except:
             self.seeds = 0
         try:
-            self.peers = data.find('td', {'class': 'sl_p'}).text
+            self.set_peers(row)
         except:
             self.peers = 0
         try:
-            self.super_seed['href'] = data.find('a', {'class': 'u5'}).attrs['href']
+            self.set_super_seed_href(row)
         except:
             self.super_seed['href'] = ''
         try:
-            self.super_seed['nick'] = data.find('a', {'class': 'u5'}).get_text()
+            self.set_super_seed_nick(row)
         except:
             self.super_seed['nick'] = ''
         return self
+
+    def set_super_seed_nick(self, row):
+        self.super_seed['nick'] = row.find('a', {'class': 'u5'}).get_text()
+
+    def set_super_seed_href(self, row):
+        self.super_seed['href'] = row.find('a', {'class': 'u5'}).attrs['href']
+
+    def set_peers(self, row):
+        self.peers = row.find('td', {'class': 'sl_p'}).text
+
+    def set_seeds(self, row):
+        self.seeds = row.find('td', {'class': 'sl_s'}).text
+
+    def set_upload(self, row):
+        self.uploaded = row.find_all('td', {'class': 's'})[2].text
+
+    def set_size(self, row):
+        self.size = row.find_all('td', {'class': 's'})[1].text
+
+    def set_commentary_cnt(self, row):
+        self.commentary_cnt = row.find_all('td', {'class': 's'})[0].text
+
+    def set_year(self, row):
+        self.year = row.find('td', {'class': 'nam'}).text.split('/')[2]
+
+    def set_quality(self, row):
+        self.quality = row.find('td', text=re.compile('\d{3,4}(p|P)')).getText().split('/')[-1].split()[-1][1:-1]
+
+    def set_name(self, row):
+        self.name = row.find('td', {'class': 'nam'}).text.split('/')[0]
+
+    def set_category(self, row):
+        self.category = row.find('img', {'class': 'pointer'}).attrs['onclick'].split('cat')[-1].replace(';', '')[1:-1]
 
 
 def main():
